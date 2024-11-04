@@ -105,7 +105,7 @@ tasks.withType(JavaCompile::class) {
 }
 
 tasks.withType(org.gradle.jvm.tasks.Jar::class) {
-    archiveBaseName.set(modid)
+    archiveBaseName.set("ZombiesTools")
     manifest.attributes.run {
         this["FMLCorePluginContainsFMLMod"] = "true"
         this["ForceLoadAsMod"] = "true"
@@ -116,6 +116,12 @@ tasks.withType(org.gradle.jvm.tasks.Jar::class) {
 	    if (transformerFile.exists())
 			this["FMLAT"] = "${modid}_at.cfg"
     }
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    //Use these line when you will make *.jar file.
+    //Don't use these line when you test this library with mod.
+    exclude("kr/hahaha98757/examplemod/**")
 }
 
 tasks.processResources {
@@ -129,6 +135,10 @@ tasks.processResources {
     }
 
     rename("accesstransformer.cfg", "META-INF/${modid}_at.cfg")
+
+    from("LICENSE") {
+        rename { "LICENSE.txt" }
+    }
 }
 
 
@@ -158,4 +168,3 @@ tasks.shadowJar {
 }
 
 tasks.assemble.get().dependsOn(tasks.remapJar)
-
